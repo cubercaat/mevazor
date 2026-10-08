@@ -1,0 +1,13 @@
+﻿{
+  "name": "mevazor",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Mevazor - fruit-only marketplace (customer app + admin panel)",
+  "engines": { "node": ">=22.5" },
+  "scripts": {
+    "start": "node --no-warnings server/index.js",
+    "seed": "node --no-warnings server/seed.js --reset",
+    "dev": "node --no-warnings --watch server/index.js"
+  }
+}
