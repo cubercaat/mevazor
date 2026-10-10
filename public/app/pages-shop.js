@@ -92,7 +92,7 @@ export async function fruits(_, query) {
   v.innerHTML = `<div class="container">
     <div class="page-head"><h1>Mevalar</h1><p>Faqat yangi va sifatli mevalar</p></div>
     <div class="toolbar">
-      <div class="search"><span style="display:contents">${icon('search', 20)}</span><input id="q" class="input" type="search" placeholder="Meva, sotuvchi yoki kategoriya…" value="${esc(f.q || '')}" autocomplete="off"></div>
+      <div class="search">${icon('search', 20)}<input id="q" class="input" type="search" placeholder="Meva, sotuvchi yoki kategoriya…" value="${esc(f.q || '')}" autocomplete="off"></div>
       <button class="btn outline fbtn" id="fbtn" style="border-radius:99px">${icon('sliders', 18)} Filtrlar<span class="fcount hide" id="fcount"></span></button>
       <select id="sort" class="select" aria-label="Saralash">${SORT_LABELS.map(([k, l]) => `<option value="${k}" ${(f.sort || 'popular') === k ? 'selected' : ''}>${l}</option>`).join('')}</select>
     </div>

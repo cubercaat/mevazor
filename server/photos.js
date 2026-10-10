@@ -17,6 +17,6 @@ export const DEMO_PHOTOS = {
 export function ensureDemoPhotos() {
   for (const p of q.all('SELECT id, name FROM products WHERE id NOT IN (SELECT product_id FROM product_images)')) {
     const slug = DEMO_PHOTOS[p.name];
-    if (slug && existsSync(resolve(PHOTO_DIR, `${slug}.jpg`))) q.run('INSERT INTO product_images (product_id, url, sort) VALUES (?,?,0)', p.id, `/photos/${slug}.jpg`);
+    if (slug && existsSync(resolve(PHOTO_DIR, `${slug}.jpg`))) q.run('INSERT INTO product_images (product_id, url, sort) VALUES (?,?,0)', p.id, `${globalThis.__BASE__ || ''}/photos/${slug}.jpg`);
   }
 }

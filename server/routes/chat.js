@@ -137,5 +137,5 @@ function scheduleDemoReply(c, text) {
     try {
       insertMessage(c, seller.user_id, 'SELLER', reply, null, null);
     } catch { /* chat might be gone */ }
-  }, 1800 + Math.random() * 1500).unref();
+  }, 1800 + Math.random() * 1500).unref?.();
 }

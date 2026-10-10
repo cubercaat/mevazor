@@ -65,7 +65,7 @@ export function rateLimit(key, max, windowMs) {
 setInterval(() => {
   const t = Date.now();
   for (const [k, b] of buckets) if (b.reset < t) buckets.delete(k);
-}, 60_000).unref();
+}, 60_000).unref?.();
 
 /* ---------- uploads (magic-byte verified) ---------- */
 const MAGIC = [
@@ -80,13 +80,19 @@ export function saveImage(dataUrl) {
   if (buf.length > 3 * 1024 * 1024) throw badRequest('Rasm hajmi 3 MB dan oshmasligi kerak');
   const kind = MAGIC.find((k) => k.test(buf));
   if (!kind) throw badRequest('Rasm fayli yaroqsiz');
+  // Browser demo build has no disk: hand the (already validated) image back as a data URL.
+  if (globalThis.__DEMO__) return `data:image/${kind.ext === 'jpg' ? 'jpeg' : kind.ext};base64,${m[2]}`;
   mkdirSync(UPLOAD_DIR, { recursive: true });
   const name = `${randomBytes(12).toString('hex')}.${kind.ext}`;
   writeFileSync(resolve(UPLOAD_DIR, name), buf);
   return `/uploads/${name}`;
 }
 /** Accept only URLs we produced ourselves (prevents hot-linking arbitrary hosts / javascript: urls). */
-export const ownUpload = (u) => (typeof u === 'string' && (/^\/uploads\/[a-f0-9]{24}\.(png|jpg|webp)$/.test(u) || /^\/photos\/[a-z-]+\.jpg$/.test(u)) ? u : null);
+export const ownUpload = (u) => {
+  if (typeof u !== 'string') return null;
+  if (/^(\/[\w-]+)?\/uploads\/[a-f0-9]{24}\.(png|jpg|webp)$/.test(u) || /^(\/[\w-]+)?\/photos\/[a-z-]+\.jpg$/.test(u)) return u;
+  return globalThis.__DEMO__ && /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(u) ? u : null;
+};
 
 /* ---------- audit + notifications ---------- */
 export function audit(ctx, action, entity, entityId, meta) {

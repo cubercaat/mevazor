@@ -23,6 +23,15 @@ node scripts/e2e.mjs # 39 API checks: RBAC, validation, full order → return li
 | SELLER | `samarqand@mevazor.uz` (also `fargona@`, `fresh@`, `xorazm@`) | `Seller#2026` |
 | COURIER | `courier1@mevazor.uz` … `courier4@` | `Courier#2026` |
 
+## Live demo (GitHub Pages, works on phones)
+
+After the repo is public and Pages is enabled (Settings → Pages → Source: GitHub Actions) the workflow `.github/workflows/pages.yml` publishes:
+
+- Customer app: https://cubercaat.github.io/mevazor/
+- Admin panel: https://cubercaat.github.io/mevazor/admin/
+
+GitHub Pages is static hosting, so the demo build runs the *same server code* inside the browser (SQLite compiled to WebAssembly via sql.js; `window.fetch` is intercepted for `/api/*`). Each visitor gets their own private copy of the data, stored in that browser; add `?reset` to the URL to start over. Build/preview locally: `npm install && npm run build:demo && npm run serve:demo` → http://localhost:4000/mevazor/. The Node server in `server/` remains the real, multi-user backend.
+
 ## The core flow (as built)
 
 1. Customer picks fruit → cart (per-kg quantities, 0.5 kg steps, presets or custom).
